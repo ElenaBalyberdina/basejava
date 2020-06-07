@@ -5,7 +5,7 @@ import java.util.Objects;
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    Resume[] storage = new Resume[10000];
+    private final Resume[] storage = new Resume[10000];
     private int size = 0;
 
     void clear() {
@@ -13,9 +13,26 @@ public class ArrayStorage {
         size = 0;
     }
 
+    void update(Resume r) {
+        //chek if resume is present
+        if (exist(r)) {
+            for (int i = 0; i < size; i++) {
+                if (storage[i].equals(r)) {
+                    storage[i] = r;
+                }
+            }
+        }
+    }
+
     void save(Resume r) {
-      storage[size] = r;
-      size ++;
+        //chek if resume is not present
+        if (!exist(r)) {
+            storage[size] = r;
+            size++;
+        } else {
+            System.out.println("resume already exist");
+        }
+
     }
 
     Resume get(String uuid) {
@@ -28,12 +45,18 @@ public class ArrayStorage {
     }
 
     void delete(String uuid) {
-        for (int i = 0; i < size; i++) {
-            if (Objects.equals(storage[i].uuid, uuid)) {
-                storage[i] = storage[size-1];
-                storage[size-1] = null;
-                size --;
-                break;
+        //chek if resume is present
+        if (!exist(get(uuid))) {
+            System.out.println("resume is not exis");
+
+        } else {
+            for (int i = 0; i < size; i++) {
+                if (Objects.equals(storage[i].uuid, uuid)) {
+                    storage[i] = storage[size - 1];
+                    storage[size - 1] = null;
+                    size--;
+                    break;
+                }
             }
         }
     }
@@ -54,5 +77,15 @@ public class ArrayStorage {
     }
 
     int size() {
-       return size;
-}}
+        return size;
+    }
+
+    private boolean exist(Resume r) {
+        for (int i = 0; i < size; i++) {
+            if (r.equals(storage[i])) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
